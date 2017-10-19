@@ -11,44 +11,47 @@ block content
   script(src='https://sdk.amazonaws.com/js/aws-sdk-2.41.0.min.js')
   style(language='text/css').
     input#wisdom {
-    padding: 4px;
-    font-size: 1em;
-    width: 400px
+      padding: 4px;
+      font-size: 1em;
+      width: 400px
     }
+
     input::placeholder {
-    color: #ccc;
-    font-style: italic;
+      color: #ccc;
+      font-style: italic;
     }
+
     p.userRequest {
-    margin: 4px;
-    padding: 4px 10px 4px 10px;
-    border-radius: 4px;
-    min-width: 50%;
-    max-width: 85%;
-    float: left;
-    background-color: Turquoise;
+      margin: 4px;
+      padding: 4px 10px 4px 10px;
+      border-radius: 4px;
+      min-width: 50%;
+      max-width: 85%;
+      float: left;
+      background-color: Turquoise;
     }
+
     p.lexResponse {
-    margin: 4px;
-    padding: 4px 10px 4px 10px;
-    border-radius: 4px;
-    text-align: right;
-    min-width: 50%;
-    max-width: 85%;
-    float: right;
-    background-color: lightcyan;
-    font-style: italic;
+      margin: 4px;
+      padding: 4px 10px 4px 10px;
+      border-radius: 4px;
+      text-align: right;
+      min-width: 50%;
+      max-width: 85%;
+      float: right;
+      background-color: lightcyan;
+      font-style: italic;
     }
+
     p.lexError {
-    margin: 4px;
-    padding: 4px 10px 4px 10px;
-    border-radius: 4px;
-    text-align: right;
-    min-width: 50%;
-    max-width: 85%;
-    float: right;
-    background-color: red;
-    color: white;
+      margin: 4px;
+      padding: 4px 10px 4px 10px;
+      border-radius: 4px;
+      text-align: right;
+      min-width: 50%;
+      max-width: 85%;
+      float: right;
+      background-color: lavender;
     }
   body
     div(align='center')
@@ -65,12 +68,13 @@ block content
         // Initialize the Amazon Cognito credentials provider
         AWS.config.region = 'us-east-1'; // Region
         AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-        // Provide your Pool Id here
-        IdentityPoolId: 'us-east-1:b4bd9b07-a698-4afc-8ee8-ea593596b260',
+          // Provide your Pool Id here
+          IdentityPoolId: 'us-east-1:b4bd9b07-a698-4afc-8ee8-ea593596b260',
         });
         var lexruntime = new AWS.LexRuntime();
         var lexUserId = 'chatbot-demo' + Date.now();
         var sessionAttributes = {};
+
         function pushChat() {
         // if there is text to be sent...
         var wisdomText = document.getElementById('wisdom');
@@ -91,7 +95,7 @@ block content
         lexruntime.postText(params, function(err, data) {
         if (err) {
         console.log(err, err.stack);
-        showError('Error:  ' + err.message + ' (see console for details)')
+        showError('Sorry, our developers have messed up somewhere. Please try entering that again.')
         }
         if (data) {
         // capture the sessionAttributes for the next cycle
@@ -107,39 +111,33 @@ block content
         // we always cancel form submission
         return false;
         }
+
         function showRequest(daText) {
-        var conversationDiv = document.getElementById('conversation');
-        var requestPara = document.createElement("P");
-        requestPara.className = 'userRequest';
-        requestPara.appendChild(document.createTextNode(daText));
-        conversationDiv.appendChild(requestPara);
-        conversationDiv.scrollTop = conversationDiv.scrollHeight;
+          var conversationDiv = document.getElementById('conversation');
+          var requestPara = document.createElement("P");
+          requestPara.className = 'userRequest';
+          requestPara.appendChild(document.createTextNode(daText));
+          conversationDiv.appendChild(requestPara);
+          conversationDiv.scrollTop = conversationDiv.scrollHeight;
         }
         function showError(daText) {
-        var conversationDiv = document.getElementById('conversation');
-        var errorPara = document.createElement("P");
-        errorPara.className = 'lexError';
-        errorPara.appendChild(document.createTextNode(daText));
-        conversationDiv.appendChild(errorPara);
-        conversationDiv.scrollTop = conversationDiv.scrollHeight;
+          var conversationDiv = document.getElementById('conversation');
+          var errorPara = document.createElement("P");
+          errorPara.className = 'lexError';
+          errorPara.appendChild(document.createTextNode(daText));
+          conversationDiv.appendChild(errorPara);
+          conversationDiv.scrollTop = conversationDiv.scrollHeight;
         }
         function showResponse(lexResponse) {
-        var conversationDiv = document.getElementById('conversation');
-        var responsePara = document.createElement("P");
-        responsePara.className = 'lexResponse';
-        if (lexResponse.message) {
-        responsePara.appendChild(document.createTextNode(lexResponse.message));
-        responsePara.appendChild(document.createElement('br'));
-        }
-        if (lexResponse.dialogState === 'ReadyForFulfillment') {
-        responsePara.appendChild(document.createTextNode(
-        'Ready for fulfillment'));
-        // TODO:  show slot values
-        } else {
-        responsePara.appendChild(document.createTextNode(
-        '(' + lexResponse.dialogState + ')'));
-        }
-        conversationDiv.appendChild(responsePara);
-        conversationDiv.scrollTop = conversationDiv.scrollHeight;
+          var conversationDiv = document.getElementById('conversation');
+          var responsePara = document.createElement("P");
+          responsePara.className = 'lexResponse';
+          if (lexResponse.message) {
+            responsePara.appendChild(document.createTextNode(lexResponse.message));
+            responsePara.appendChild(document.createElement('br'));
+          }
+          conversationDiv.appendChild(responsePara);
+          conversationDiv.scrollTop = conversationDiv.scrollHeight;
+
         }
 
